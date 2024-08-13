@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  yocto-build:
+    build:
+      context: .
+    tty: true
+    command: /bin/bash
+    volumes:
+      - ./:/home/build
+
