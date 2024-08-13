@@ -1,54 +1,37 @@
-# Dockerfile for build environment
-
-# Pull base image.
 FROM ubuntu:20.04
 
-# Set environment variables.
-# prevent tzdata from asking for timezone
 ARG DEBIAN_FRONTEND=noninteractive
 
-# Install.
-# ncurses 5 is needed for xsct, otherwise it fails with a cryptic error message
 RUN \
-  sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list && \
-  apt-get update && \
-  apt-get -y upgrade && \
-  apt-get install -y build-essential && \
-  apt-get update &&\
-  apt-get install -y curl git htop man vim python-setuptools \
-                     python3-setuptools locales diffstat \
-                     texinfo libncurses5 pkg-config gawk wget \
-		     unzip texinfo gcc build-essential chrpath \
-		     socat cpio python3 python3-pip python3-pexpect \
-		     xz-utils debianutils iputils-ping python3-git \
-		     python3-jinja2 python3-subunit zstd liblz4-tool \
-		     file locales libacl1 && \
-  apt-get clean && \
-  rm -rf /var/lib/apt/lists/*
+        dpkg --add-architecture i386 && \
+        apt-get update && \
+        apt-get install -yq sudo build-essential git nano vim\
+          python3-yaml libncursesw5 libncursesw5:i386 \
+          python python3 man bash diffstat gawk chrpath wget cpio \
+          texinfo lzop apt-utils bc screen libncurses5-dev locales \
+          libc6-dev-i386 doxygen libssl-dev dos2unix xvfb x11-utils \
+          g++-multilib libssl-dev:i386 zlib1g-dev:i386 \
+          libtool libtool-bin procps python3-distutils pigz socat \
+          zstd iproute2 lz4 iputils-ping \
+          curl libtinfo5 net-tools xterm rsync u-boot-tools unzip zip && \
 
-# Set environment variables.
-ENV HOME=/home/build
+        rm -rf /var/lib/apt-lists/* && \
+        echo "dash dash/sh boolean false" | debconf-set-selections && \
+        dpkg-reconfigure dash
 
-# Define working directory.
+RUN curl https://storage.googleapis.com/git-repo-downloads/repo > /bin/repo && chmod a+x /bin/repo
+RUN sed -i "1s/python/python3/" /bin/repo
+RUN groupadd build -g 1000
+RUN useradd -ms /bin/bash -p build build -u 1028 -g 1000 && \
+        usermod -aG sudo build && \
+        echo "build:build" | chpasswd
+
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+    locale-gen
+
+ENV LANG en_US.utf8
+
+USER build
 WORKDIR /home/build
+RUN git config --global user.email "build@example.com" && git config --global user.name "Build"
 
-# Define default command.
-CMD ["bash"]
-
-RUN locale-gen en_US && \
-    locale-gen en_US.UTF-8 &&\
-    update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
-
-
-RUN useradd -m build && adduser build sudo && \
-    sed -i 's/%sudo\s*ALL=(ALL:ALL) ALL/%sudo ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers && \
-    chown -R build:build /home/build
-
-RUN echo "export LANG=en_US.UTF-8 \
-          export LANGUAGE=en_US.UTF-8 \
-          export LC_ALL=en_US.UTF-8" >> /home/build/.bashrc
-
-ENV LANG=en_US.UTF-8
-
-# Switch to the non-root user
-#USER builder
