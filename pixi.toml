@@ -1,0 +1,26 @@
+[project]
+channels = ["conda-forge"]
+description = "Add a short description here"
+name = "ArgoLinux"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+cmake = ">=3.30.2,<4"
+python = ">=3.12.5,<4"
+gawk = ">=5.3.0,<6"
+wget = ">=1.21.4,<2"
+zstd = ">=1.5.6,<2"
+unzip = ">=6.0,<7"
+texinfo = ">=7.0,<8"
+gcc = ">=14.1.0,<15"
+perl = ">=5.32.1,<6"
+ccache = ">=4.10.1,<5"
+socat = ">=1.8.0.1,<2"
+which = ">=2.21,<3"
+libarchive = ">=3.7.4,<4"
+bash = ">=5.2.21,<6"
+chrpath = ">=0.16,<0.17"
+diffutils = ">=3.10,<4"
