@@ -8,6 +8,7 @@ bitbake-cookerdaemon.log
 build/conf/conf-notes.txt
 build/conf/conf-summary.txt
 .wget-hsts
+build/bitbake.lock
 
 # We might want this eventually, for now, ignoring
 build/conf/templateconf.cfg 
