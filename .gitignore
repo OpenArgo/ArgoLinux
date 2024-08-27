@@ -11,6 +11,3 @@ build/conf/conf-summary.txt
 
 # We might want this eventually, for now, ignoring
 build/conf/templateconf.cfg 
-# pixi environments
-.pixi
-*.egg-info

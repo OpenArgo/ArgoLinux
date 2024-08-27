@@ -11,4 +11,7 @@ services:
     cap_add:
       - NET_ADMIN
     privileged: true
-
+    environment:
+      - UID=${UID:-1000}
+      - GID=${GID:-1000}
+    user: "build:${UID}:${GID}"

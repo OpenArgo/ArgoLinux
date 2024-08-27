@@ -22,9 +22,13 @@ RUN \
 RUN curl https://storage.googleapis.com/git-repo-downloads/repo > /bin/repo && chmod a+x /bin/repo
 RUN sed -i "1s/python/python3/" /bin/repo
 RUN groupadd build -g 1000
-RUN useradd -ms /bin/bash -p build build -u 1028 -g 1000 && \
+RUN useradd -ms /bin/bash -p build build -u 1000 -g 1000 && \
         usermod -aG sudo build && \
         echo "build:build" | chpasswd
+
+CMD ["bash"]
+
+RUN chown -R build:build /home/build
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
@@ -34,4 +38,5 @@ ENV LANG en_US.utf8
 USER build
 WORKDIR /home/build
 RUN git config --global user.email "build@example.com" && git config --global user.name "Build"
+
 
