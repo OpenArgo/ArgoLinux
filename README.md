@@ -13,4 +13,8 @@ export UID=$(id -u)
 export GID=$(id -g)
 docker compose run --rm --build yocto-build`
 ```
-4. In the docker container, run `. sources/poky/oe-init-build-env`, then run `bitbake core-image-minimal` 
+4. In the docker container, run
+```bash
+. sources/poky/oe-init-build-env
+bitbake core-image-minimal 
+```
