@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  yocto-build:
+    build:
+      context: .
+    tty: true
+    command: /bin/bash
+    volumes:
+      - ./:/home/build
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+    environment:
+      - UID=${UID:-1000}
+      - GID=${GID:-1000}
+    user: "build:${UID}:${GID}"
